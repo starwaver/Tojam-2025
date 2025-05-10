@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3 uid="uid://bshyve8vfg2jr"]
+
+[ext_resource type="Script" uid="uid://b6exb0xfude6d" path="res://SwordArea.gd" id="1_74bdg"]
+[ext_resource type="Texture2D" uid="uid://bmd71i28an8p8" path="res://assets/Stick.png" id="2_e4ynd"]
+[ext_resource type="Shader" uid="uid://bmqajgpu555f" path="res://hue.gdshader" id="2_r76a6"]
+[ext_resource type="Texture2D" uid="uid://bheatjvucopku" path="res://assets/mosiac_stick.png" id="4_dwvek"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dwvek"]
+shader = ExtResource("2_r76a6")
+shader_parameter/use_grayscale = true
+shader_parameter/shift_color = Color(0.65, 0.452833, 0.195, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sh265"]
+size = Vector2(156.965, 19.0134)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rx5id"]
+shader = ExtResource("2_r76a6")
+shader_parameter/use_grayscale = true
+shader_parameter/shift_color = Color(0.738118, 0.593943, 0.409963, 1)
+
+[node name="Sword" type="Area2D"]
+rotation = -1.5708
+script = ExtResource("1_74bdg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_dwvek")
+position = Vector2(79.5812, 0.488186)
+rotation = -1.5708
+scale = Vector2(0.237204, 1.22529)
+texture = ExtResource("2_e4ynd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(79.6101, 0.493296)
+shape = SubResource("RectangleShape2D_sh265")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_rx5id")
+position = Vector2(120.391, 3.375)
+rotation = 1.5708
+scale = Vector2(0.401042, 0.415923)
+texture = ExtResource("4_dwvek")
+
+[connection signal="area_entered" from="." to="." method="_on_body_entered"]

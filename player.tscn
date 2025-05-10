@@ -1,0 +1,230 @@
+[gd_scene load_steps=25 format=3 uid="uid://bentjxy6a5kw8"]
+
+[ext_resource type="Script" uid="uid://cgiuq6gdvma1t" path="res://player.gd" id="1_4flbx"]
+[ext_resource type="Shader" uid="uid://bmqajgpu555f" path="res://hue.gdshader" id="2_hqtel"]
+[ext_resource type="PackedScene" uid="uid://bshyve8vfg2jr" path="res://sword.tscn" id="3_i3pqv"]
+[ext_resource type="Texture2D" uid="uid://cd6ftw08qf71e" path="res://assets/grey_player.png" id="3_sweqy"]
+[ext_resource type="Texture2D" uid="uid://dmua41elcyol1" path="res://assets/Hand_3.png" id="5_sweqy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2hs0m"]
+shader = ExtResource("2_hqtel")
+shader_parameter/use_grayscale = true
+shader_parameter/shift_color = Color(1, 0.67451, 0.756863, 1)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sweqy"]
+radius = 23.0
+height = 118.0
+
+[sub_resource type="Shader" id="Shader_1jxqw"]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform float Shift_Hue;
+
+void fragment() {
+// Input:3
+	vec3 input_color;
+	vec4 texture_color = texture(TEXTURE, UV);
+	input_color = texture_color.rgb;
+
+// VectorFunc:2
+	vec3 color_hsv;
+	{
+		vec3 c = input_color;
+		vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+		vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+		vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+		float d = q.x - min(q.w, q.y);
+		float e = 1.0e-10;
+		color_hsv=vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+	}
+
+	color_hsv.x = mod((color_hsv.x + Shift_Hue), 1.0f);
+
+// VectorFunc:5
+	vec3 color_rgb;
+	{
+		vec3 c = color_hsv;
+		vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+		vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+		color_rgb=c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+	}
+
+// Output:0
+	texture_color = vec4(color_rgb.rgb,texture_color.a);
+	COLOR.rgba = texture_color;
+
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dw050"]
+shader = SubResource("Shader_1jxqw")
+shader_parameter/Shift_Hue = 0.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dw050"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1jxqw"]
+animation = &"held"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sweqy"]
+animation = &"swing_down"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2hs0m"]
+animation = &"swing_up"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dw050"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b26j0"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_n7ghd"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nvl01"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_n7ghd"]
+states/Idle/node = SubResource("AnimationNodeAnimation_dw050")
+states/Idle/position = Vector2(408, 177)
+states/Start/position = Vector2(274, 98)
+states/held/node = SubResource("AnimationNodeAnimation_1jxqw")
+states/held/position = Vector2(776, 97)
+states/swing_down/node = SubResource("AnimationNodeAnimation_sweqy")
+states/swing_down/position = Vector2(570, 101)
+states/swing_up/node = SubResource("AnimationNodeAnimation_2hs0m")
+states/swing_up/position = Vector2(564, 270)
+transitions = ["swing_down", "held", SubResource("AnimationNodeStateMachineTransition_dw050"), "held", "swing_up", SubResource("AnimationNodeStateMachineTransition_b26j0"), "Idle", "swing_down", SubResource("AnimationNodeStateMachineTransition_n7ghd"), "swing_up", "Idle", SubResource("AnimationNodeStateMachineTransition_nvl01")]
+
+[sub_resource type="Animation" id="Animation_sweqy"]
+resource_name = "swing_down"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Hand:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.5708]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Hand:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0333333, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(41, -114), Vector2(56, -41)]
+}
+
+[sub_resource type="Animation" id="Animation_2hs0m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Hand:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Hand:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(41, -114)]
+}
+
+[sub_resource type="Animation" id="Animation_1jxqw"]
+resource_name = "swing_up"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Hand:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.5708, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Hand:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(56, -41), Vector2(41, -114)]
+}
+
+[sub_resource type="Animation" id="Animation_nvl01"]
+resource_name = "held"
+
+[sub_resource type="Animation" id="Animation_dw050"]
+resource_name = "Idle"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1jxqw"]
+_data = {
+&"Idle": SubResource("Animation_dw050"),
+&"RESET": SubResource("Animation_2hs0m"),
+&"held": SubResource("Animation_nvl01"),
+&"swing_down": SubResource("Animation_sweqy"),
+&"swing_up": SubResource("Animation_1jxqw")
+}
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_4flbx")
+arc_down = 90.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_2hs0m")
+position = Vector2(2.86102e-06, -59.5583)
+scale = Vector2(0.516667, 0.516667)
+texture = ExtResource("3_sweqy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -59)
+shape = SubResource("CapsuleShape2D_sweqy")
+
+[node name="Hand" type="Node2D" parent="."]
+position = Vector2(41, -114)
+
+[node name="Sword" parent="Hand" instance=ExtResource("3_i3pqv")]
+material = SubResource("ShaderMaterial_dw050")
+
+[node name="Sprite2D" type="Sprite2D" parent="Hand"]
+material = SubResource("ShaderMaterial_2hs0m")
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("5_sweqy")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath(".")
+tree_root = SubResource("AnimationNodeStateMachine_n7ghd")
+anim_player = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimationTree"]
+libraries = {
+&"": SubResource("AnimationLibrary_1jxqw")
+}

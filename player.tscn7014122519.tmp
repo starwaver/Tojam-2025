@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bentjxy6a5kw8"]
+
+[ext_resource type="Script" uid="uid://cgiuq6gdvma1t" path="res://player.gd" id="1_4flbx"]
+[ext_resource type="Texture2D" uid="uid://bclqrbf7xeli0" path="res://assets/red_player.png" id="2_i3pqv"]
+[ext_resource type="PackedScene" uid="uid://bshyve8vfg2jr" path="res://sword.tscn" id="3_i3pqv"]
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_4flbx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(2.86102e-06, -59.5583)
+scale = Vector2(0.516667, 0.516667)
+texture = ExtResource("2_i3pqv")
+flip_h = true
+
+[node name="Sword" parent="." instance=ExtResource("3_i3pqv")]
+position = Vector2(39, -69)

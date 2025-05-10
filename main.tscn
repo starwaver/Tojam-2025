@@ -1,3 +1,14 @@
-[gd_scene format=3 uid="uid://b10y14wnipf4o"]
+[gd_scene load_steps=3 format=3 uid="uid://b10y14wnipf4o"]
+
+[ext_resource type="Texture2D" uid="uid://b16hgas0wi48u" path="res://assets/background.png" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://bentjxy6a5kw8" path="res://player.tscn" id="1_ig7tw"]
 
 [node name="Node2D" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(577.25, 322)
+scale = Vector2(0.751628, 0.630859)
+texture = ExtResource("1_0xm2m")
+
+[node name="CharacterBody2D" parent="." instance=ExtResource("1_ig7tw")]
+position = Vector2(618, 546)
