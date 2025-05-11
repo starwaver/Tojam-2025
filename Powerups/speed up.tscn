@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://bgbfm11guxd3h"]
+
+[ext_resource type="Script" uid="uid://dcdcqrwkfw41m" path="res://power_up.gd" id="1_i0kvi"]
+[ext_resource type="Texture2D" uid="uid://cpw7bag4lgkyk" path="res://assets/Power Ups/speed_up.png" id="2_i0kvi"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mkoic"]
+radius = 20.025
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mkoic"]
+size = Vector2(58, 58)
+
+[node name="Speed Up" type="Node2D"]
+script = ExtResource("1_i0kvi")
+speed_up_amount = 30.0
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+shape = SubResource("CircleShape2D_mkoic")
+
+[node name="Area2D" type="Area2D" parent="RigidBody2D"]
+collision_layer = 8
+collision_mask = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D/Area2D"]
+shape = SubResource("RectangleShape2D_mkoic")
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D/Area2D"]
+scale = Vector2(0.453125, 0.453125)
+texture = ExtResource("2_i0kvi")
+
+[connection signal="body_entered" from="RigidBody2D/Area2D" to="." method="_on_area_2d_body_entered"]

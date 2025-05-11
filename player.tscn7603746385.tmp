@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bentjxy6a5kw8"]
+[gd_scene load_steps=27 format=3 uid="uid://bentjxy6a5kw8"]
 
 [ext_resource type="Script" uid="uid://cgiuq6gdvma1t" path="res://player.gd" id="1_4flbx"]
 [ext_resource type="Texture2D" uid="uid://ofju4f01qvt5" path="res://assets/Racoon_Hit.png" id="2_1jxqw"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://bfya31muts84g" path="res://assets/Racoon_Die2.png" id="4_dw050"]
 [ext_resource type="Texture2D" uid="uid://dmua41elcyol1" path="res://assets/Hand_3.png" id="5_sweqy"]
 [ext_resource type="Script" uid="uid://i0g75cdbodxp" path="res://Hurtbox.gd" id="6_2hs0m"]
-[ext_resource type="AudioStream" uid="uid://c5itfjt3sy14u" path="res://assets/racoon hurt.wav" id="9_b26j0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1jxqw"]
 atlas = ExtResource("2_2hs0m")
@@ -196,13 +195,7 @@ _data = {
 radius = 28.0
 height = 108.0
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dw050"]
-radius = 28.0
-height = 108.0
-
 [node name="CharacterBody2D" type="CharacterBody2D"]
-collision_layer = 4
-collision_mask = 0
 script = ExtResource("1_4flbx")
 swing_speed = 10.0
 swing_cd = 1.0
@@ -224,9 +217,9 @@ texture = ExtResource("3_sweqy")
 position = Vector2(11, -133)
 rotation = -1.48353
 
-[node name="Sword" parent="Hand" node_paths=PackedStringArray("player") instance=ExtResource("3_i3pqv")]
+[node name="Sword" parent="Hand" instance=ExtResource("3_i3pqv")]
 material = SubResource("ShaderMaterial_dw050")
-player = NodePath("../..")
+maxDamage = 100
 
 [node name="Sprite2D" type="Sprite2D" parent="Hand"]
 scale = Vector2(0.3, 0.3)
@@ -250,15 +243,6 @@ shape = SubResource("CapsuleShape2D_1jxqw")
 [node name="SwingTimer" type="Timer" parent="."]
 wait_time = 0.3
 one_shot = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -55)
-shape = SubResource("CapsuleShape2D_dw050")
-debug_color = Color(0.922366, 5.12111e-05, 0.687781, 0.42)
-
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("9_b26j0")
-volume_db = 9.369
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="timeout" from="SwingTimer" to="." method="_on_swing_timer_timeout"]

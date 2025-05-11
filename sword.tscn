@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bshyve8vfg2jr"]
+[gd_scene load_steps=8 format=3 uid="uid://bshyve8vfg2jr"]
 
 [ext_resource type="Script" uid="uid://b6exb0xfude6d" path="res://Hitbox.gd" id="1_74bdg"]
 [ext_resource type="Script" uid="uid://k2hqjbtml4v" path="res://sword.gd" id="1_dwvek"]
 [ext_resource type="Texture2D" uid="uid://bmd71i28an8p8" path="res://assets/Stick.png" id="2_e4ynd"]
 [ext_resource type="Shader" uid="uid://bmqajgpu555f" path="res://hue.gdshader" id="2_r76a6"]
+[ext_resource type="Texture2D" uid="uid://bub8cfal100u4" path="res://assets/Untitled_2.png" id="5_rx5id"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dwvek"]
 shader = ExtResource("2_r76a6")
@@ -11,16 +12,16 @@ shader_parameter/use_grayscale = true
 shader_parameter/shift_color = Color(0.65, 0.452833, 0.195, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sh265"]
-size = Vector2(156.965, 19.0134)
+size = Vector2(64, 14)
 
 [node name="Sword" type="Node2D"]
 script = ExtResource("1_dwvek")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_dwvek")
-position = Vector2(79.5812, 0.488186)
+position = Vector2(32, 0)
 rotation = -1.5708
-scale = Vector2(0.237204, 1.22529)
+scale = Vector2(0.15, 0.5)
 texture = ExtResource("2_e4ynd")
 
 [node name="Hitbox" type="Area2D" parent="."]
@@ -29,5 +30,13 @@ script = ExtResource("1_74bdg")
 metadata/_custom_type_script = "uid://b6exb0xfude6d"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(79.6101, 0.493296)
+position = Vector2(32, 0)
 shape = SubResource("RectangleShape2D_sh265")
+
+[node name="Goat" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(63.9629, -20)
+rotation = 1.57079
+scale = Vector2(0.16658, 0.16658)
+texture = ExtResource("5_rx5id")
+centered = false

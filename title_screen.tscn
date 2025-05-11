@@ -34,7 +34,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 5.0
+"speed": 2.0
 }]
 
 [node name="TitleScreen" type="Control"]
@@ -54,6 +54,7 @@ offset_bottom = 40.0
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="EndScreen"]
 position = Vector2(666, 302)
 sprite_frames = SubResource("SpriteFrames_hafda")
+autoplay = "default"
 frame = 2
 frame_progress = 1.0
 
@@ -107,4 +108,5 @@ texture = ExtResource("4_tpml5")
 expand_mode = 1
 stretch_mode = 5
 
+[connection signal="button_down" from="EndScreen/TextureButton" to="." method="restart_game"]
 [connection signal="pressed" from="StartScreen/TextureButton" to="." method="start_the_game"]

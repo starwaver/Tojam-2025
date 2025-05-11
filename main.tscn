@@ -1,10 +1,21 @@
-[gd_scene load_steps=6 format=3 uid="uid://b10y14wnipf4o"]
+[gd_scene load_steps=16 format=3 uid="uid://b10y14wnipf4o"]
 
 [ext_resource type="Script" uid="uid://bx4qetdrid4ki" path="res://game_manager.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://bentjxy6a5kw8" path="res://player.tscn" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://c7ygk6y258mb3" path="res://assets/background4.PNG" id="2_h2yge"]
+[ext_resource type="Texture2D" uid="uid://dga2jpmltxgns" path="res://assets/Goat_background.png" id="3_w48qg"]
 [ext_resource type="PackedScene" uid="uid://dttgafuwg32tm" path="res://title_screen.tscn" id="4_1bvp3"]
 [ext_resource type="AudioStream" uid="uid://dfuant0i2xrkd" path="res://assets/William Tell Overture Finale 8 Bitwav.wav" id="5_lquwl"]
+[ext_resource type="Texture2D" uid="uid://bw55lph6o04pr" path="res://assets/hp_bar.png" id="6_5vw27"]
+[ext_resource type="Texture2D" uid="uid://c23ph6f76pjk4" path="res://assets/white_pixel.png" id="7_kek77"]
+[ext_resource type="Script" uid="uid://bt85eyv2ojsgl" path="res://health_bar.gd" id="8_4c57u"]
+[ext_resource type="PackedScene" uid="uid://djfeu5m0ck136" path="res://Powerups/stick up.tscn" id="9_kek77"]
+[ext_resource type="Script" uid="uid://bed1c3e1cr30o" path="res://spawner.gd" id="10_4c57u"]
+[ext_resource type="PackedScene" uid="uid://cgnj6jbybv4c5" path="res://Powerups/damage up.tscn" id="11_dg77c"]
+[ext_resource type="PackedScene" uid="uid://bgbfm11guxd3h" path="res://Powerups/speed up.tscn" id="12_ycdy4"]
+[ext_resource type="PackedScene" uid="uid://b5oggyespgrxb" path="res://Powerups/goat.tscn" id="13_ycdy4"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kek77"]
 
 [node name="Game Control" type="Node2D"]
 script = ExtResource("1_1bvp3")
@@ -15,14 +26,26 @@ position = Vector2(638, 359.5)
 scale = Vector2(0.838892, 0.704102)
 texture = ExtResource("2_h2yge")
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("1_ig7tw")]
+[node name="Sprite2D" type="Sprite2D" parent="Background"]
+position = Vector2(-287.284, -173.98)
+texture = ExtResource("3_w48qg")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Background"]
+position = Vector2(753.375, 257.775)
+texture = ExtResource("3_w48qg")
+
+[node name="Player_1" parent="." instance=ExtResource("1_ig7tw")]
 position = Vector2(234, 649)
+collision_mask = 1
+swing_cd = 0.2
 player_color = Color(0.363634, 0.550193, 1, 1)
 
-[node name="CharacterBody2D2" parent="." instance=ExtResource("1_ig7tw")]
+[node name="Player_2" parent="." instance=ExtResource("1_ig7tw")]
 position = Vector2(1109, 649)
-player_color = Color(0.961415, 7.9897e-06, 0.566298, 1)
+collision_mask = 1
 player_number = 2
+swing_cd = 0.2
+player_color = Color(0.961415, 7.9897e-06, 0.566298, 1)
 
 [node name="TitleScreen" parent="." instance=ExtResource("4_1bvp3")]
 
@@ -31,4 +54,64 @@ stream = ExtResource("5_lquwl")
 volume_db = -16.865
 autoplay = true
 
-[connection signal="game_over" from="." to="TitleScreen" method="game_end"]
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="p1_health" type="TextureProgressBar" parent="UI" node_paths=PackedStringArray("player")]
+layout_mode = 0
+offset_right = 461.0
+offset_bottom = 48.0
+value = 50.0
+nine_patch_stretch = true
+texture_over = ExtResource("6_5vw27")
+texture_progress = ExtResource("7_kek77")
+tint_progress = Color(1, 0.8, 0, 1)
+script = ExtResource("8_4c57u")
+player = NodePath("../../Player_1")
+
+[node name="p2_health" type="TextureProgressBar" parent="UI" node_paths=PackedStringArray("player")]
+layout_mode = 0
+offset_left = 874.0
+offset_right = 1278.0
+offset_bottom = 41.0
+value = 50.0
+fill_mode = 1
+nine_patch_stretch = true
+texture_over = ExtResource("6_5vw27")
+texture_progress = ExtResource("7_kek77")
+tint_progress = Color(1, 0.8, 0, 1)
+script = ExtResource("8_4c57u")
+player = NodePath("../../Player_2")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(657, 657)
+shape = SubResource("WorldBoundaryShape2D_kek77")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(1283, 628)
+rotation = -1.57079
+shape = SubResource("WorldBoundaryShape2D_kek77")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-3, 576)
+rotation = 1.57079
+shape = SubResource("WorldBoundaryShape2D_kek77")
+
+[node name="Spawner" type="Node2D" parent="."]
+position = Vector2(626, -122)
+script = ExtResource("10_4c57u")
+spawnableObjects = Array[PackedScene]([ExtResource("11_dg77c"), ExtResource("12_ycdy4"), ExtResource("9_kek77"), ExtResource("13_ycdy4"), ExtResource("11_dg77c"), ExtResource("12_ycdy4"), ExtResource("9_kek77"), ExtResource("11_dg77c"), ExtResource("12_ycdy4"), ExtResource("9_kek77")])
+
+[node name="SpawnTimer" type="Timer" parent="Spawner"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(640, 360)
+
+[connection signal="game_started" from="." to="Spawner" method="_on_game_control_game_started"]
+[connection signal="timeout" from="Spawner/SpawnTimer" to="Spawner" method="_on_spawn_timer_timeout"]
