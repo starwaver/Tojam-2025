@@ -1,16 +1,25 @@
 extends CharacterBody2D
 
-# --- movement constants ---
-const SPEED := 200.0
-
-@export var arc_up:      float = -45.0          # degrees – “rest” angle
-@export var arc_down:    float =  45.0          # degrees – lowest point
-@export var swing_speed: float = 540.0          # degrees per second
+@export var move_speed: float = 200.0
+@export var swing_speed: float = 0.1
 @export var swing_cd:    float = 0.20           # optional cool-down (s)
+@export var player_color: Color = Color(1, 1, 1, 1)
+@export var player_number: int = 1
+
+@onready var player_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var hand_sprite: Sprite2D = $Hand/Sprite2D
+@onready var Sword: Node2D = $Hand/Sword
 
 # --- sword swing control ---
 var can_swing: bool = true
-const SWING_COOLDOWN := 0.30          # seconds
+var progress := 0.0
+var animation_length
+var is_dead = false
+
+# --- player controls
+var move_left_key = "p1_move_left"
+var move_right_key = "p1_move_right"
+var swing_key = "p1_swing"
 
 # --- health (for later combat testing) ---
 var dir = 1.0
@@ -18,18 +27,18 @@ var previous_dir = 1.0
 var health: int = 100
 
 @onready var hand: Node2D = $Hand
-@onready var tree  : AnimationTree = $AnimationTree
-@onready var state : AnimationNodeStateMachinePlayback = tree.get("parameters/playback")
-
+@onready var animationPlayer  : AnimationPlayer = $AnimationPlayer
 
 func _physics_process(delta):
+	if !GameManager.has_game_started:
+		return
+	
 	var input_vector = Vector2.ZERO
 	
-	if Input.is_action_pressed("move_left"):
+	if Input.is_action_pressed(move_left_key):
 		input_vector.x -= 1
 		dir = -1.0
-		
-	if Input.is_action_pressed("move_right"):
+	if Input.is_action_pressed(move_right_key):
 		input_vector.x += 1
 		dir = 1.0
 
@@ -40,37 +49,47 @@ func _physics_process(delta):
 		previous_dir = dir
 
 	if input_vector != Vector2.ZERO:
-		velocity = input_vector * SPEED
+		velocity = input_vector * move_speed
 		move_and_collide(velocity * delta)
 	else:
 		velocity = Vector2.ZERO
+
+func _process(delta):
+	# 1) Move progress toward 1 while held, toward 0 when released
+	if Input.is_action_pressed(swing_key):
+		progress = clamp(progress + delta * swing_speed, 0, 1)
+	else:
+		progress = clamp(progress - delta * swing_speed, 0, 1)
+
+	# 2) Compute target time and scrub there
+	animationPlayer.seek(progress, true)
 		
 func _ready() -> void:
-	reset_sword()
+	_set_player_color(player_color)
+	if player_number == 2:
+		move_left_key = "p2_move_left"
+		move_right_key = "p2_move_right"
+		swing_key = "p2_swing"
 	
-func reset_sword() -> void:
-	hand.rotation_degrees = arc_up
-	
-func update_sword(delta: float) -> void:
-	var wants := Input.is_action_pressed("swing") and can_swing
-	var target := arc_down if wants else arc_up
-
-	# rotate toward target at swing_speed degrees / second
-	hand.rotation_degrees = move_toward(
-		hand.rotation_degrees,
-		target,
-		swing_speed * delta
-	)
-	
-		# 3. Hit-box & visibility housekeeping
-	# if wants:
-		# hand.hitbox.disabled = false
-	# else:
-		# once the blade is all the way back up we can hide/disable it
-		# if absf(hand.rotation_degrees - arc_up) < 0.1:
-			# sword.hitbox.disabled = true
+func _set_player_color(new_color: Color) -> void:
+	player_color = new_color
+	player_sprite.modulate = player_color
+	hand_sprite.modulate = player_color
 
 func take_damage(amount: int) -> void:
-	health -= amount
+	if is_dead:
+		return
+		
 	if health <= 0:
-		queue_free()
+		player_sprite.play("R18G death")
+		is_dead = true
+		hand.hide()
+		GameManager.end_game()
+		return
+		
+	health -= amount
+	player_sprite.play("Hit")
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	if player_sprite.animation == "Hit":
+		player_sprite.play("Idle")

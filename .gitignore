@@ -4,6 +4,8 @@
 /android/
 =======
 .nomedia
+/Build/
+*.zip
 
 # Godot-specific ignores
 .import/

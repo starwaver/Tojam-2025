@@ -1,14 +1,34 @@
-[gd_scene load_steps=3 format=3 uid="uid://b10y14wnipf4o"]
+[gd_scene load_steps=6 format=3 uid="uid://b10y14wnipf4o"]
 
-[ext_resource type="Texture2D" uid="uid://b16hgas0wi48u" path="res://assets/background.png" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://bx4qetdrid4ki" path="res://game_manager.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://bentjxy6a5kw8" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="Texture2D" uid="uid://c7ygk6y258mb3" path="res://assets/background4.PNG" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://dttgafuwg32tm" path="res://title_screen.tscn" id="4_1bvp3"]
+[ext_resource type="AudioStream" uid="uid://dfuant0i2xrkd" path="res://assets/William Tell Overture Finale 8 Bitwav.wav" id="5_lquwl"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Game Control" type="Node2D"]
+script = ExtResource("1_1bvp3")
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(577.25, 322)
-scale = Vector2(0.751628, 0.630859)
-texture = ExtResource("1_0xm2m")
+modulate = Color(1, 1, 1, 0.458824)
+position = Vector2(638, 359.5)
+scale = Vector2(0.838892, 0.704102)
+texture = ExtResource("2_h2yge")
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("1_ig7tw")]
-position = Vector2(618, 546)
+position = Vector2(234, 649)
+player_color = Color(0.363634, 0.550193, 1, 1)
+
+[node name="CharacterBody2D2" parent="." instance=ExtResource("1_ig7tw")]
+position = Vector2(1109, 649)
+player_color = Color(0.961415, 7.9897e-06, 0.566298, 1)
+player_number = 2
+
+[node name="TitleScreen" parent="." instance=ExtResource("4_1bvp3")]
+
+[node name="WilliamTellOvertureFinale8Bitwav" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_lquwl")
+volume_db = -16.865
+autoplay = true
+
+[connection signal="game_over" from="." to="TitleScreen" method="game_end"]
