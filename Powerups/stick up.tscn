@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://djfeu5m0ck136"]
 
-[ext_resource type="Script" uid="uid://dcdcqrwkfw41m" path="res://power_up.gd" id="1_je5c8"]
+[ext_resource type="Script" uid="uid://dcdcqrwkfw41m" path="res://scripts/power_up.gd" id="1_je5c8"]
 [ext_resource type="Texture2D" uid="uid://b7fetipbekatl" path="res://assets/Power Ups/stick_up.png" id="2_jcf6d"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mkoic"]

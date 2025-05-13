@@ -8,8 +8,3 @@ extends Area2D
 func _init() -> void:
 	collision_layer = 2
 	collision_mask = 0
-
-func _on_body_entered(body: Node) -> void:
-	if body.has_method("take_damage"):
-		print("Hit!")
-		body.take_damage(damage)

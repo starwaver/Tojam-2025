@@ -1,13 +1,13 @@
 [gd_scene load_steps=29 format=3 uid="uid://bentjxy6a5kw8"]
 
-[ext_resource type="Script" uid="uid://cgiuq6gdvma1t" path="res://player.gd" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://cgiuq6gdvma1t" path="res://scripts/player.gd" id="1_4flbx"]
 [ext_resource type="Texture2D" uid="uid://ofju4f01qvt5" path="res://assets/Racoon_Hit.png" id="2_1jxqw"]
 [ext_resource type="Texture2D" uid="uid://b2j014aiyla4r" path="res://assets/Racoon_idle_animation.png" id="2_2hs0m"]
-[ext_resource type="PackedScene" uid="uid://bshyve8vfg2jr" path="res://sword.tscn" id="3_i3pqv"]
+[ext_resource type="PackedScene" uid="uid://bshyve8vfg2jr" path="res://scenes/sword.tscn" id="3_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://bqqau0yxlepue" path="res://assets/Racoon.png" id="3_sweqy"]
 [ext_resource type="Texture2D" uid="uid://bfya31muts84g" path="res://assets/Racoon_Die2.png" id="4_dw050"]
 [ext_resource type="Texture2D" uid="uid://dmua41elcyol1" path="res://assets/Hand_3.png" id="5_sweqy"]
-[ext_resource type="Script" uid="uid://i0g75cdbodxp" path="res://Hurtbox.gd" id="6_2hs0m"]
+[ext_resource type="Script" uid="uid://i0g75cdbodxp" path="res://scripts/Hurtbox.gd" id="6_2hs0m"]
 [ext_resource type="AudioStream" uid="uid://c5itfjt3sy14u" path="res://assets/racoon hurt.wav" id="9_b26j0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1jxqw"]
@@ -111,7 +111,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_q13i1")
 }],
 "loop": false,
-"name": &"R18G death",
+"name": &"R18G_death",
 "speed": 5.0
 }]
 
@@ -205,13 +205,12 @@ collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_4flbx")
 swing_speed = 10.0
-swing_cd = 1.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-7, -58.6591)
 scale = Vector2(0.494318, 0.494318)
 sprite_frames = SubResource("SpriteFrames_nvl01")
-animation = &"R18G death"
+animation = &"R18G_death"
 autoplay = "Idle"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -261,4 +260,3 @@ stream = ExtResource("9_b26j0")
 volume_db = 9.369
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="timeout" from="SwingTimer" to="." method="_on_swing_timer_timeout"]

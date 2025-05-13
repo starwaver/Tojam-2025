@@ -1,7 +1,7 @@
 extends Node
 
 @export var has_game_started: bool = false
-@export var EndScreen: Control
+@export var end_screen: Control
 signal game_over
 signal game_started
 

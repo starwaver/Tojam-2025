@@ -1,19 +1,18 @@
-[gd_scene load_steps=16 format=3 uid="uid://b10y14wnipf4o"]
+[gd_scene load_steps=15 format=3 uid="uid://b10y14wnipf4o"]
 
-[ext_resource type="Script" uid="uid://bx4qetdrid4ki" path="res://game_manager.gd" id="1_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://bentjxy6a5kw8" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://bx4qetdrid4ki" path="res://scripts/game_manager.gd" id="1_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://bentjxy6a5kw8" path="res://scenes/player.tscn" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://c7ygk6y258mb3" path="res://assets/background4.PNG" id="2_h2yge"]
 [ext_resource type="Texture2D" uid="uid://dga2jpmltxgns" path="res://assets/Goat_background.png" id="3_w48qg"]
-[ext_resource type="PackedScene" uid="uid://dttgafuwg32tm" path="res://title_screen.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://dttgafuwg32tm" path="res://scenes/title_screen.tscn" id="4_1bvp3"]
 [ext_resource type="AudioStream" uid="uid://dfuant0i2xrkd" path="res://assets/William Tell Overture Finale 8 Bitwav.wav" id="5_lquwl"]
 [ext_resource type="Texture2D" uid="uid://bw55lph6o04pr" path="res://assets/hp_bar.png" id="6_5vw27"]
 [ext_resource type="Texture2D" uid="uid://c23ph6f76pjk4" path="res://assets/white_pixel.png" id="7_kek77"]
-[ext_resource type="Script" uid="uid://bt85eyv2ojsgl" path="res://health_bar.gd" id="8_4c57u"]
+[ext_resource type="Script" uid="uid://bt85eyv2ojsgl" path="res://scripts/health_bar.gd" id="8_4c57u"]
 [ext_resource type="PackedScene" uid="uid://djfeu5m0ck136" path="res://Powerups/stick up.tscn" id="9_kek77"]
-[ext_resource type="Script" uid="uid://bed1c3e1cr30o" path="res://spawner.gd" id="10_4c57u"]
+[ext_resource type="Script" uid="uid://bed1c3e1cr30o" path="res://scripts/spawner.gd" id="10_4c57u"]
 [ext_resource type="PackedScene" uid="uid://cgnj6jbybv4c5" path="res://Powerups/damage up.tscn" id="11_dg77c"]
 [ext_resource type="PackedScene" uid="uid://bgbfm11guxd3h" path="res://Powerups/speed up.tscn" id="12_ycdy4"]
-[ext_resource type="PackedScene" uid="uid://b5oggyespgrxb" path="res://Powerups/goat.tscn" id="13_ycdy4"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kek77"]
 
@@ -37,14 +36,12 @@ texture = ExtResource("3_w48qg")
 [node name="Player_1" parent="." instance=ExtResource("1_ig7tw")]
 position = Vector2(234, 649)
 collision_mask = 1
-swing_cd = 0.2
 player_color = Color(0.363634, 0.550193, 1, 1)
 
 [node name="Player_2" parent="." instance=ExtResource("1_ig7tw")]
 position = Vector2(1109, 649)
 collision_mask = 1
 player_number = 2
-swing_cd = 0.2
 player_color = Color(0.961415, 7.9897e-06, 0.566298, 1)
 
 [node name="TitleScreen" parent="." instance=ExtResource("4_1bvp3")]
@@ -106,7 +103,7 @@ shape = SubResource("WorldBoundaryShape2D_kek77")
 [node name="Spawner" type="Node2D" parent="."]
 position = Vector2(626, -122)
 script = ExtResource("10_4c57u")
-spawnableObjects = Array[PackedScene]([ExtResource("11_dg77c"), ExtResource("12_ycdy4"), ExtResource("9_kek77"), ExtResource("13_ycdy4"), ExtResource("11_dg77c"), ExtResource("12_ycdy4"), ExtResource("9_kek77"), ExtResource("11_dg77c"), ExtResource("12_ycdy4"), ExtResource("9_kek77")])
+spawnable_objects = Array[PackedScene]([ExtResource("11_dg77c"), ExtResource("12_ycdy4"), ExtResource("9_kek77")])
 
 [node name="SpawnTimer" type="Timer" parent="Spawner"]
 

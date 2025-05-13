@@ -1,9 +1,9 @@
 extends Node2D
 
 # @export var spawnableObject = preload ("res://power_up.tscn") 
-@export var spawnableObjects:Array[PackedScene]
+@export var spawnable_objects:Array[PackedScene]
 
-@onready var spawnTimer: Timer = $SpawnTimer
+@onready var spawn_timer: Timer = $SpawnTimer
 var screen_width
 
 func _ready():
@@ -11,8 +11,8 @@ func _ready():
 	GameManager.game_started.connect(start_timer)
 
 func spawn():
-	var random_index = randi() % spawnableObjects.size()
-	var obj = spawnableObjects[random_index]
+	var random_index = randi() % spawnable_objects.size()
+	var obj = spawnable_objects[random_index]
 	var powerup = obj.instantiate()
 	add_child(powerup)
 	var x_pos = randf_range(-screen_width, screen_width)
@@ -22,4 +22,4 @@ func _on_spawn_timer_timeout() -> void:
 	spawn()
 
 func start_timer() -> void:
-	spawnTimer.start()
+	spawn_timer.start()

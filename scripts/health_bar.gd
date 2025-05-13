@@ -3,8 +3,8 @@ extends TextureProgressBar
 @export var player: Player
 
 func update_health():
-	value = player.currentHealth * 100 / player.maxHealth
+	value = player.current_health * 100 / player.max_health
 	
 func _ready() -> void:
-	player.healthChanged.connect(update_health)
+	player.health_changed.connect(update_health)
 	update_health()

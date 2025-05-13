@@ -11,10 +11,10 @@ extends Node2D
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.has_method("power_up"):
-		body.power_up(speed_up_amount, sword_growth_amount, damage_up_amount)
+	if body.has_method("apply_power_up"):
+		body.apply_power_up(speed_up_amount, sword_growth_amount, damage_up_amount)
 		queue_free()
 		
-	if body.has_method("Goat") && isGoat:
-		body.Goat()
+	if body.has_method("transform_to_goat") && isGoat:
+		body.transform_to_goat()
 		queue_free()
