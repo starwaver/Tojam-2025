@@ -76,19 +76,23 @@ func _physics_process(delta: float) -> void:
 	elif Input.is_action_pressed(action_move_right):
 		input_vector.x = 1
 
-	# update facing
-	if input_vector.x != 0:
-		facing_direction = input_vector.x
-	if facing_direction != previous_facing_direction:
-		scale.x = facing_direction
-		previous_facing_direction = facing_direction
-
 	# movement
 	velocity = input_vector.normalized() * move_speed
-	if velocity != Vector2.ZERO:
-		move_and_collide(velocity * delta)
+	velocity.y = get_gravity().y
+	move_and_slide()
+	
+		# update facing
+	if velocity.x > 0:
+		facing_direction = 1
+	elif velocity.x < 0:
+		facing_direction = -1
 	else:
-		velocity = Vector2.ZERO
+		pass
+		
+	if facing_direction != previous_facing_direction:
+		change_facing()
+		previous_facing_direction = facing_direction
+	
 
 func _process(delta: float) -> void:
 	# handle swing progress
@@ -112,6 +116,9 @@ func _process(delta: float) -> void:
  
 	# scrub animation
 	animation_player.seek(swing_progress, true)
+	
+func change_facing():
+	scale.x = -1
 
 # --- GAMEPLAY LOGIC ---
 func apply_damage(amount: int) -> void:
